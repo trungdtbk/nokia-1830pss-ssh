@@ -2,7 +2,7 @@
 
 ## Install
 
-pip install nokia-1830pss
+pip install nokia1830pss
 
 ## Usage
 
