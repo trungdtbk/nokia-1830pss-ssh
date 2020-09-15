@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name="nokia1830pss",
-    version="1.0.1",
+    version="1.0.2",
     author="Trung Truong",
     author_email="trungdtbk@gmail.com",
     description="A SSH library for Nokia 1830-PSS NEs",
