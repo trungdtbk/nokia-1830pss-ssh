@@ -57,7 +57,7 @@ def test_login_to_standby(mocked_pssroot):
     pss, channel = mocked_pssroot
     response = Response([
         'EC1830-81-18 login:', None,
-        'Password:', None, None,
+        'Password:', None,
         'Welcome to MontaVista(R) Linux(R) Carrier Grade Edition 4.0 (0600995).\r\n'
         'root@EC1830-81-18-STDBY:/root\r\n# ', None,
         'root@EC1830-81-1-ACT:/root# ',
@@ -75,7 +75,7 @@ def test_login_to_slave_shelf(mocked_pssroot):
     pss, channel = mocked_pssroot
     response = Response([
         'EC1830-2-1 login:', None,
-        'Password:', None, None,
+        'Password:', None,
         'Welcome to MontaVista(R) Linux(R) Carrier Grade Edition 4.0 (0600995).\r\n'
         'root@EC1830-2-1-ACT:/root\r\n# ', None,
         'root@EC1830-81-1-ACT:/root# ',
@@ -92,12 +92,12 @@ def test_login_to_slave_shelf_no_ec_provided(mocked_pssroot):
     pss, channel = mocked_pssroot
     response = Response([
             'EC1830-2-1 login:', None,
-            'Password:', None, None,
+            'Password:', None,
             'Welcome to MontaVista(R) Linux(R) Carrier Grade Edition 4.0 (0600995).\r\n'
             'root@EC1830-2-1-STDBY:/root\r\n# ', None,
             'root@EC1830-81-1-ACT:/root# ', None,
             'EC1830-2-1 login:', None,
-            'Password:', None, None,
+            'Password:', None,
             'Welcome to MontaVista(R) Linux(R) Carrier Grade Edition 4.0 (0600995).\r\n'
             'root@EC1830-2-18-ACT:/root\r\n# ', None,
             'root@EC1830-2-18-ACT:/root\r\n# '
@@ -137,7 +137,7 @@ def test_login_to_slot_no_password_required(mocked_pssroot):
     pss, channel = mocked_pssroot
     response = Response([
         'EC1830-2-1 login:', None,
-        '# ', None, None, '# '
+        '# ', None, '# '
         ])
     channel.recv.side_effect = response.recv
     channel.recv_ready.side_effect = response.recv_ready    

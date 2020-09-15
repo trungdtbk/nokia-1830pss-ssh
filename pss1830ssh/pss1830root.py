@@ -2,6 +2,7 @@
 Abstraction for NE root shell 
 """
 import os
+import time
 from pss1830ssh.pss1830 import PSS1830
 from pss1830ssh.pss1830 import PSSException
 
@@ -43,16 +44,26 @@ class PSS1830Root(PSS1830):
     def _telnet(self, ip):
         self.logger.debug('telnet %s', ip)
         self._send('telnet %s' % ip)
-        if self._expect('login:'):
+        if self._expect('login:'):            
             self._send(self.username)
-            data = ''.join(self._recv_all())
-            if self._match(self.telnet_prompt_re, data):
-                self.logger.debug('telnet %s succeeded', ip)
-                return True
-            elif self._match('Password:', data):
+            time.sleep(1)
+            data = self._recv()
+            if self._match('Password:', data):
                 self._send(self.password)
                 self.logger.debug('telnet %s succeeded', ip)
                 return True
+            elif self._match(self.telnet_prompt_re, data):
+                self.logger.debug('telnet %s succeeded', ip)
+                return True
+
+            # data = ''.join(self._recv_all())
+            # if self._match(self.telnet_prompt_re, data):
+            #     self.logger.debug('telnet %s succeeded', ip)
+            #     return True
+            # elif self._match('Password:', data):
+            #     self._send(self.password)
+            #     self.logger.debug('telnet %s succeeded', ip)
+            #     return True
         self.cancel()
         self.logger.debug('telnet %s failed', ip)
         return False
