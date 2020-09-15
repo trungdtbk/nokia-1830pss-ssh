@@ -43,16 +43,19 @@ class PSS1830Root(PSS1830):
     def _telnet(self, ip):
         self.logger.debug('telnet %s', ip)
         self._send('telnet %s' % ip)
-        for expect, response in [('login:', self.username), ('Password:', self.password)]:
-            if self._expect(expect):
-                self._send(response)
-                if self._expect(self.telnet_prompt_re):
-                    break
-            else:
-                self.logger.debug('expect: %s but not received', expect)
-                self.cancel()
-                return False
-        return True
+        if self._expect('login:'):
+            self._send(self.username)
+            data = ''.join(self._recv_all())
+            if self._match(self.telnet_prompt_re, data):
+                self.logger.debug('telnet %s succeeded', ip)
+                return True
+            elif self._match('Password:', data):
+                self._send(self.password)
+                self.logger.debug('telnet %s succeeded', ip)
+                return True
+        self.cancel()
+        self.logger.debug('telnet %s failed', ip)
+        return False
     
     def login_to_slot(self, shelf, slot):
         """Telnet to a card/slot."""
