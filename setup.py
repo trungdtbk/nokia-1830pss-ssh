@@ -4,12 +4,13 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="nokia-1830pss",
-    version="1.0.0",
+    name="nokia1830pss",
+    version="1.0.1",
     author="Trung Truong",
     author_email="trungdtbk@gmail.com",
     description="A SSH library for Nokia 1830-PSS NEs",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url="https://github.com/trungdtbk/nokia-1830pss-ssh.git",
     packages=setuptools.find_packages(),
     classifiers=[
