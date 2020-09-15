@@ -40,28 +40,28 @@ class PSS1830(object):
 
     def open(self):
         """Open a SSH connection to a NE."""
-        self.logger.debug('Opening SSH connection')
+        self.logger.info('Opening SSH connection')
         if self.connected:
-            self.logger.debug('SSH already opened')
+            self.logger.info('SSH already opened')
             return
         self.client.connect(self.host, self.port, self.username, self.password)
         self.channel = self.client.invoke_shell()
         self.channel.settimeout(self.TIMEOUT)
         self.connected = True
-        self.logger.debug('SSH connection opened')
+        self.logger.info('SSH connection opened')
 
     def close(self):
         """Close the SSH connection."""
-        self.logger.debug('Closing SSH connection')
+        self.logger.info('Closing SSH connection')
         if self.connected:
             self.connected = False
             self.channel.close()
             self.client.close()
-        self.logger.debug('SSH connection closed')
+        self.logger.info('SSH connection closed')
 
     def execute(self, command):
         """Excecute a command on the NE."""
-        self.logger.debug('Executing: %s', command)
+        self.logger.info('Executing: %s', command)
         if not self.connected:
             raise PSSException('Not connected')
         self._send(command)
@@ -73,10 +73,12 @@ class PSS1830(object):
 
     def _expect(self, expect):
         """Expect a certain response from the NE."""
+        self.logging.debug('waiting for: %s', expect)
         for _ in range(int(self.TIMEOUT/self.sleep_interval)):
             data = self._recv()
             match = self._match(expect, data)
             if match:
+                self.logging.debug('received the expect')
                 return match
             else:
                 time.sleep(self.sleep_interval)
@@ -84,7 +86,7 @@ class PSS1830(object):
 
     def _get_prompt(self, prompt_re=None):
         """Get the NE's prompt."""
-        self.logger.debug('Getting prompt')
+        self.logger.info('Getting prompt')
         self.prompt = None
         if not prompt_re:
             prompt_re = self.PROMPT_RE
@@ -92,7 +94,7 @@ class PSS1830(object):
         data = self._expect(prompt_re)
         if data:
             self.prompt = data.group().strip()
-        self.logger.debug('Got prompt: %s', self.prompt)
+        self.logger.info('Got prompt: %s', self.prompt)
         return self.prompt
 
     def _check_prompt(self, data):
@@ -112,6 +114,7 @@ class PSS1830(object):
         if not self.connected:
             raise PSSException('Not connected')
         self.channel.sendall(command + '\n')
+        self.logger.debug('sent: %s', command)
 
     def _recv(self):
         """Receive data from the NE."""
@@ -122,6 +125,7 @@ class PSS1830(object):
             new_data = self.channel.recv(1024)
             if new_data:
                 data += new_data
+        self.logger.debug('received: %s', data)
         return data
 
     def _recv_all(self):
