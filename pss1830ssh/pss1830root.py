@@ -55,15 +55,6 @@ class PSS1830Root(PSS1830):
             elif self._match(self.telnet_prompt_re, data):
                 self.logger.debug('telnet %s succeeded', ip)
                 return True
-
-            # data = ''.join(self._recv_all())
-            # if self._match(self.telnet_prompt_re, data):
-            #     self.logger.debug('telnet %s succeeded', ip)
-            #     return True
-            # elif self._match('Password:', data):
-            #     self._send(self.password)
-            #     self.logger.debug('telnet %s succeeded', ip)
-            #     return True
         self.cancel()
         self.logger.debug('telnet %s failed', ip)
         return False

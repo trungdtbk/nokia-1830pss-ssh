@@ -73,12 +73,12 @@ class PSS1830(object):
 
     def _expect(self, expect):
         """Expect a certain response from the NE."""
-        self.logging.debug('waiting for: %s', expect)
+        self.logger.debug('waiting for: %s', expect)
         for _ in range(int(self.TIMEOUT/self.sleep_interval)):
             data = self._recv()
             match = self._match(expect, data)
             if match:
-                self.logging.debug('received the expect')
+                self.logger.debug('received the expect')
                 return match
             else:
                 time.sleep(self.sleep_interval)
